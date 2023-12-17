@@ -24,8 +24,7 @@ const Feed = new Schema({
 		default: "",
 	  },
 	timestamp: {
-		type: String,
-		default: Date.now()
+		 type: Date, default: Date.now 
 	}
 });
 

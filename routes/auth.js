@@ -35,7 +35,7 @@ router.post("/register", (req, res) => {
             })
             user.save(err => {
                 if (err) {
-                    res.send(err)
+                    res.send({message : "Error in login"})
                 } else {
                     res.send({ message: "Successfully Registered, Please login now.", userId: user._id, name: user.name })
                 }
