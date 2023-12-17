@@ -8,7 +8,7 @@ const chat = require('./routes/chat')
 const app = express();
 const { connectToDatabase, connection } = require('./config/db');
 const mongoose = require('mongoose');
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3000
 const socket = require("socket.io");
 const doctorRanks = require('./utils/pagerank')
 const bodyParser = require('body-parser');
@@ -22,7 +22,7 @@ connectToDatabase().then(() => {
 		credentials: true,
 	  }));
 	app.use((req, res, next) => {
-		res.header('Access-Control-Allow-Origin', 'http://besthealing.baavlibuch.com');
+		res.header('Access-Control-Allow-Origin', '*');
 		res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
 		res.header('Access-Control-Allow-Headers', 'Content-Type');
 		next();
