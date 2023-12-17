@@ -5,14 +5,14 @@ const Login = require('./routes/auth')
 const upload = require('./routes/uploads')
 const follow = require('./routes/follow')
 const chat = require('./routes/chat')
-const app = express();
 const { connectToDatabase, connection } = require('./config/db');
 const mongoose = require('mongoose');
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3000
 const socket = require("socket.io");
 const doctorRanks = require('./utils/pagerank')
 const bodyParser = require('body-parser');
 const  question  = require("./routes/question");
+const app = express();
 connectToDatabase().then(() => {
 	app.use(bodyParser.json({ limit: '50mb' }));
 	app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
@@ -22,7 +22,7 @@ connectToDatabase().then(() => {
 		credentials: true,
 	  }));
 	app.use((req, res, next) => {
-		res.header('Access-Control-Allow-Origin', 'http://besthealing.baavlibuch.com');
+		res.header('Access-Control-Allow-Origin', '*');
 		res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
 		res.header('Access-Control-Allow-Headers', 'Content-Type');
 		next();
@@ -37,15 +37,13 @@ connectToDatabase().then(() => {
 	});
 
 	console.log('Doctor Ranks:', doctorRanks);
-
-
 	const io = socket(server, {
 		cors: {
 			origin: "*",
 			credentials: true,
 		},
 		maxHttpBufferSize: 1e8, pingTimeout: 60000
-	});
+	})
 
 	global.onlineUsers = new Map();
 	io.on("connection", (socket) => {
