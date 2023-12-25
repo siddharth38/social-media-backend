@@ -4,14 +4,16 @@ const cors = require('cors');
 const Login = require('./routes/auth')
 const upload = require('./routes/uploads')
 const follow = require('./routes/follow')
+const profile =require('./routes/profile')
 const chat = require('./routes/chat')
 const { connectToDatabase, connection } = require('./config/db');
 const mongoose = require('mongoose');
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3001
 const socket = require("socket.io");
 const doctorRanks = require('./utils/pagerank')
 const bodyParser = require('body-parser');
 const  question  = require("./routes/question");
+
 const app = express();
 connectToDatabase().then(() => {
 	app.use(bodyParser.json({ limit: '50mb' }));
@@ -31,7 +33,8 @@ connectToDatabase().then(() => {
 	app.use("/feed", upload)
 	app.use("/follow", follow)
 	app.use("/chat", chat)
-    app.use("/qna",question)
+    app.use("/profile",profile)
+	app.use("/qna",question)
 	const server = app.listen(PORT, () => {
 		console.log(`Server start at port no ${PORT}`)
 	});
