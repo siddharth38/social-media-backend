@@ -1,9 +1,10 @@
 const Question = require("../database/Question");
 const router = require("express").Router();
 const  mongoose =  require("mongoose");
+const auth = require("../middleware/auth");
 
 // question routes
-router.post('/question/ask', async (req, res) => {
+router.post('/question/ask',auth, async (req, res) => {
     const postQuestionData = req.body;
     const postQuestion = new Question(postQuestionData);
     try {
@@ -15,7 +16,7 @@ router.post('/question/ask', async (req, res) => {
     }
 });
 
-router.get("/question/get", async (req, res) => {
+router.get("/question/get",auth, async (req, res) => {
     try {
         const questionList = await Question.find();
         res.status(200).json(questionList);
@@ -24,7 +25,7 @@ router.get("/question/get", async (req, res) => {
     }
 });
 
-router.patch("/question/vote/:id", async (req, res) => {
+router.patch("/question/vote/:id",auth, async (req, res) => {
     const { id: _id } = req.params;
     const { value } = req.body;
     const userId = req.userId;
@@ -70,7 +71,7 @@ router.patch("/question/vote/:id", async (req, res) => {
     }
 });
 
-router.delete("/question/delete/:id", async (req, res) => {
+router.delete("/question/delete/:id", auth ,async (req, res) => {
     const { id: _id } = req.params;
     console.log(_id);
     if (!mongoose.Types.ObjectId.isValid(_id)) {
@@ -89,7 +90,7 @@ router.delete("/question/delete/:id", async (req, res) => {
 // answer from the questions 
 // this is how answer is posted to database
 
-router.patch("/answer/post/:id", async (req, res) => {
+router.patch("/answer/post/:id", auth, async (req, res) => {
     const { id: _id } = req.params;
     const { noOfAnswers, answerBody, userAnswered, userId } = req.body;
 
@@ -117,7 +118,7 @@ const updateNoOfQuestions = async (_id, noOfAnswers) => {
         console.log(error);
     }
 };
-router.patch("/answer/delete/:id", async (req, res) => {
+router.patch("/answer/delete/:id",auth,async (req, res) => {
     const { id: _id } = req.params;
     const { answerId, noOfAnswers } = req.body;
 

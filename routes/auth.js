@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const User = require('../database/User');
 const bcrypt = require("bcrypt");
+const  jwt = require("jsonwebtoken");
 //login controller
 router.post("/login", (req, res) => {
     const { name, password } = req.body
@@ -8,7 +9,15 @@ router.post("/login", (req, res) => {
         if (user) {
             const isPasswordValid = await bcrypt.compare(password, user.password);
             if (isPasswordValid) {
-                res.send({ message: "Login Successfull", userId: user._id, name: user.name })
+                const token = jwt.sign(
+                    {  name: user.name, userId:  user._id },
+                    process.env.JWT_SECRET,
+                    {
+                      expiresIn: "1h",
+                    }
+                  );
+              
+                res.send({ message: "Login Successfull",name: user.name, userId:  user._id ,token })
 
             } else {
                 res.send({ message: "Password didn't match" })

@@ -1,14 +1,14 @@
 const router = require("express").Router();
+const auth = require("../middleware/auth");
 const Follow  = require("./../database/Follow")
 const User = require('./../database/User')
 
-router.get('/get', async (req, res) => {
+router.get('/get',auth, async (req, res) => {
 	const todos = await User.find({});
 	res.json(todos);
-
 });
 
-router.put('/task', async (req, res) => {
+router.put('/task', auth ,async (req, res) => {
 	if (req.body.friends_name === req.body.name) {
 		return res.status(200).json({ message: 'Could not add self as friend' });
 	}

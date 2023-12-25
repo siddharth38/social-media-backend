@@ -10,20 +10,66 @@ const UserFollow = new Schema({
 		type: String,
 		required: true,
 	},
-	pageRank: String,
-	professionalPagerank: String,
-	postLike: String,
-	postlikeDoctor: String,
-	technicalRating: String,
-	contribution: String,
-	experience: String,
-	numberofPatient: String,
-	degrees: String,
-	instituteRating: String,
-	proceduresPracticed: String,
-	distance: String,
-	availability: String,
-	charges: String,
+	pageRank:  {
+		type: String,
+		default : "N/A"
+	},
+	professionalPagerank:  {
+		type: String,
+		default : "N/A"
+	},
+	postLike:  {
+		type: String,
+		default : "N/A"
+	},
+	postlikeDoctor:  {
+		type: String,
+		default : "N/A"
+	},
+	technicalRating: {
+		type: String,
+		default : "N/A"
+	},
+	contribution: {
+		type: String,
+		default : "N/A"
+	},
+	experience:  {
+		type: String,
+		default : "N/A"
+	},
+	numberofPatient: {
+		type: String,
+		default : "N/A"
+	},
+	degrees: {
+		type: String,
+		default : "N/A"
+	},
+	instituteRating:  {
+		type: String,
+		default : "N/A"
+	},
+	proceduresPracticed:  {
+		type: String,
+		default : "N/A"
+	},
+	distance:  {
+		type: String,
+		default : "N/A"
+	},
+	availability:  {
+		type: String,
+		default : "N/A"
+	},
+	charges:  {
+		type: String,
+		default : "N/A"
+	},
+	about:  {
+		type: String,
+		default : "N/A"
+	},
 	consultationDuration: String,
 	rating: String,
 	peerRating: String,

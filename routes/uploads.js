@@ -3,7 +3,7 @@ const Feed = require('../database/Feed')
 const upload = require('../config/gridstorage')
 const Grid = require("gridfs-stream");
 const mongoose = require("mongoose");
-
+const auth = require("../middleware/auth")
 
 
 router.post("/uploads", upload.single("image"), (req, res) => {
@@ -46,18 +46,18 @@ router.post("/upload", upload.single("image"), async (req, res) => {
   }
 });
 
-router.get("/get-image", async (req, res) => {
-  try {
-    Images.find({}).then((data) => {
-      res.send({ status: "ok", data: data });
-    });
-  } catch (error) {
-    res.json({ status: error });
-  }
-});
+// router.get("/get-image", async (req, res) => {
+//   try {
+//     Images.find({}).then((data) => {
+//       res.send({ status: "ok", data: data });
+//     });
+//   } catch (error) {
+//     res.json({ status: error });
+//   }
+// });
 
 
-router.get("/get", async (req, res) => {
+router.get("/get",auth, async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const pageSize = 2; // Adjust the page size as needed
@@ -102,7 +102,7 @@ function streamToPromise(stream) {
 
 // like route
 
-router.post("/like", async (req, res) => {
+router.post("/like", auth, async (req, res) => {
   try {
     const objectIdToFind = req.body._id
     const userfeed = await Feed.findById(objectIdToFind).exec();
