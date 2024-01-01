@@ -11,8 +11,10 @@ router.post("/uploads", upload.single("image"), (req, res) => {
   if (req.file) { var imageName = req.file.originalname;
   var contentType = req.file.contentType }
   const feeddata = req.body.data
+console.log(req.body.id)
   try {
     const userfeed = new Feed({
+      userId :req.body.id,
       name: req.body.name,
       content: feeddata,
       image: imageName,
@@ -105,6 +107,7 @@ function streamToPromise(stream) {
 router.post("/like", auth, async (req, res) => {
   try {
     const objectIdToFind = req.body._id
+    console.log(req.body._id)
     const userfeed = await Feed.findById(objectIdToFind).exec();
     if (userfeed) {
       console.log(userfeed.likes)
