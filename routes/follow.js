@@ -7,6 +7,11 @@ router.get('/get',auth, async (req, res) => {
 	const todos = await User.find({});
 	res.json(todos);
 });
+// get user logined 
+router.get('/gets/:id',auth, async (req, res) => {
+	const todos = await User.findById(req.params.id);
+	res.json(todos);
+});
 
 router.put('/task', auth ,async (req, res) => {
 	if (req.body.friends_name === req.body.name) {
