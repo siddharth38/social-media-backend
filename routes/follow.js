@@ -8,6 +8,11 @@ router.get('/get',auth, async (req, res) => {
 	res.json(todos);
 });
 
+router.get('/gets/:id',auth, async (req, res) => {
+	const todos = await User.findById(req.params.id);
+	res.json(todos);
+});
+
 router.put('/task', auth ,async (req, res) => {
 	if (req.body.friends_name === req.body.name) {
 		return res.status(200).json({ message: 'Could not add self as friend' });

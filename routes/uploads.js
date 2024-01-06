@@ -13,6 +13,7 @@ router.post("/uploads", upload.single("image"), (req, res) => {
   const feeddata = req.body.data
   try {
     const userfeed = new Feed({
+      userId :req.body.id,	    
       name: req.body.name,
       content: feeddata,
       image: imageName,
