@@ -7,6 +7,22 @@ router.get('/get',auth, async (req, res) => {
 	const todos = await User.find({});
 	res.json(todos);
 });
+
+// search the user from the database
+router.get('/search', async (req, res) => {
+	try {
+	  const { searchTerm } = req.query;
+	  const sanitizedSearchTerm = searchTerm.trim().toLowerCase();
+	  const users = await User.find({
+		name: { $regex: sanitizedSearchTerm, $options: 'i' },
+	  });
+	
+	  res.json(users);
+	} catch (error) {
+	  console.error(error);
+	  res.status(500).send('Internal Server Error');
+	}
+  });
 // get user logined 
 router.get('/gets/:id',auth, async (req, res) => {
 	const todos = await User.findById(req.params.id);
