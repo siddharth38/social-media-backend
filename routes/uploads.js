@@ -5,7 +5,6 @@ const Grid = require("gridfs-stream");
 const mongoose = require("mongoose");
 const auth = require("../middleware/auth")
 
-
 router.post("/uploads", upload.single("image"), (req, res) => {
   console.log(`upload called`)
   if (req.file) { var imageName = req.file.originalname;
@@ -28,8 +27,6 @@ console.log(req.body.id)
   }
 
 });
-
-
 
 router.post("/upload", upload.single("image"), async (req, res) => {
   if (req.file) { var imageName = req.file.filename; }
