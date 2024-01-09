@@ -16,7 +16,7 @@ router.post('/question/ask',auth, async (req, res) => {
     }
 });
 
-router.get("/question/get",auth, async (req, res) => {
+router.get("/question/get", async (req, res) => {
     try {
         const questionList = await Question.find();
         res.status(200).json(questionList);

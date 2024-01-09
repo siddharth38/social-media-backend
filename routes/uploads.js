@@ -3,9 +3,11 @@ const Feed = require('../database/Feed')
 const upload = require('../config/gridstorage')
 const Grid = require("gridfs-stream");
 const mongoose = require("mongoose");
+const User = require('./../database/User')
+
 const auth = require("../middleware/auth")
 
-router.post("/uploads", upload.single("image"), (req, res) => {
+router.post("/uploads",auth, upload.single("image"), (req, res) => {
   console.log(`upload called`)
   if (req.file) { var imageName = req.file.originalname;
   var contentType = req.file.contentType }
@@ -28,7 +30,7 @@ console.log(req.body.id)
 
 });
 
-router.post("/upload", upload.single("image"), async (req, res) => {
+router.post("/upload", auth, upload.single("image"), async (req, res) => {
   if (req.file) { var imageName = req.file.filename; }
   const feeddata = req.body.data
   try {
@@ -45,18 +47,54 @@ router.post("/upload", upload.single("image"), async (req, res) => {
   }
 });
 
-// router.get("/get-image", async (req, res) => {
-//   try {
-//     Images.find({}).then((data) => {
-//       res.send({ status: "ok", data: data });
-//     });
-//   } catch (error) {
-//     res.json({ status: error });
-//   }
-// });
+router.get("/comments/:feedId", async (req, res) => {
+  try {
+    const feedId = req.params.feedId;
+    const feed = await Feed.findById(feedId);
+    if (!feed) {
+      return res.status(404).json({ status: "error", message: "Feed not found" });
+    }
+    const comments = feed.comment;
+    res.json({ status: "ok", comments });
+  } catch (error) {
+    res.status(500).json({ status: "error", message: error.message });
+  }
+});
 
+router.put("/comment", auth, async (req, res) => {
+  console.log("called")
+  try {
+    const userId = req.body.userId; 
+    const feedId = req.body.feedId; 
+    const commentText = req.body.commentText; 
+    
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ status: "error", message: "User not found" });
+    }
+    const feed = await Feed.findById(feedId);
 
-router.get("/get",auth, async (req, res) => {
+    if (!feed) {
+      return res.status(404).json({ status: "error", message: "Feed not found" });
+    }
+
+    // Add the comment to the feed
+    feed.comment.push({
+      userId: userId,
+      text: commentText,
+      timestamp: new Date(),
+    });
+
+    // Save the updated feed
+    await feed.save();
+
+    res.json({ status: "ok", message: "Comment added successfully" });
+  } catch (error) {
+    res.status(500).json({ status: "error", message: error.message });
+  }
+});
+
+router.get("/get", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const pageSize = 2; // Adjust the page size as needed
