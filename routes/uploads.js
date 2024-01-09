@@ -62,7 +62,7 @@ router.get("/get",auth, async (req, res) => {
     const pageSize = 2; // Adjust the page size as needed
     const skip = (page - 1) * pageSize;
    
-    const feeds = await Feed.find({}).skip(skip).limit(pageSize);
+    const feeds = await Feed.find({}).sort({ timestamp: -1 }).skip(skip).limit(pageSize);
     const conn = mongoose.connection;
     Grid.mongo = mongoose.mongo;
     let gfs = Grid(conn.db);

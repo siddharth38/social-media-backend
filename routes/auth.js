@@ -5,13 +5,14 @@ const  jwt = require("jsonwebtoken");
 //login controller
 router.post("/login", (req, res) => {
     const { name, password } = req.body
+	console.log('called')
     User.findOne({ name: name }, async (err, user) => {
         if (user) {
             const isPasswordValid = await bcrypt.compare(password, user.password);
             if (isPasswordValid) {
                 const token = jwt.sign(
                     {  name: user.name, userId:  user._id },
-                    process.env.JWT_SECRET,
+                    "ajw065123",
                     {
                       expiresIn: "1h",
                     }

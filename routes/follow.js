@@ -8,7 +8,6 @@ router.get('/get',auth, async (req, res) => {
 	res.json(todos);
 });
 
-// search the user from the database
 router.get('/search', async (req, res) => {
 	try {
 	  const { searchTerm } = req.query;
@@ -23,9 +22,9 @@ router.get('/search', async (req, res) => {
 	  res.status(500).send('Internal Server Error');
 	}
   });
-// get user logined 
+
 router.get('/gets/:id',auth, async (req, res) => {
-	const todos = await User.findById(req.params.id);
+	const todos = await User.find( {name : req.params.id});
 	res.json(todos);
 });
 
