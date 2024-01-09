@@ -11,9 +11,10 @@ router.post("/uploads", upload.single("image"), (req, res) => {
   if (req.file) { var imageName = req.file.originalname;
   var contentType = req.file.contentType }
   const feeddata = req.body.data
+console.log(req.body.id)
   try {
     const userfeed = new Feed({
-      userId :req.body.id,	    
+      userId :req.body.id,
       name: req.body.name,
       content: feeddata,
       image: imageName,
@@ -64,7 +65,7 @@ router.get("/get",auth, async (req, res) => {
     const pageSize = 2; // Adjust the page size as needed
     const skip = (page - 1) * pageSize;
    
-    const feeds = await Feed.find({}).skip(skip).limit(pageSize);
+    const feeds = await Feed.find({}).sort({ timestamp: -1 }).skip(skip).limit(pageSize);
     const conn = mongoose.connection;
     Grid.mongo = mongoose.mongo;
     let gfs = Grid(conn.db);
@@ -106,6 +107,7 @@ function streamToPromise(stream) {
 router.post("/like", auth, async (req, res) => {
   try {
     const objectIdToFind = req.body._id
+    console.log(req.body._id)
     const userfeed = await Feed.findById(objectIdToFind).exec();
     if (userfeed) {
       console.log(userfeed.likes)

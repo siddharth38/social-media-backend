@@ -33,7 +33,6 @@ router.patch("/question/vote/:id",auth, async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(_id)) {
         return res.status(404).send("question unavailable...");
     }
-
     try {
         const question = await Question.findById(_id);
         const upIndex = question.upVote.findIndex((id) => id === String(userId));

@@ -8,8 +8,23 @@ router.get('/get',auth, async (req, res) => {
 	res.json(todos);
 });
 
+router.get('/search', async (req, res) => {
+	try {
+	  const { searchTerm } = req.query;
+	  const sanitizedSearchTerm = searchTerm.trim().toLowerCase();
+	  const users = await User.find({
+		name: { $regex: sanitizedSearchTerm, $options: 'i' },
+	  });
+	
+	  res.json(users);
+	} catch (error) {
+	  console.error(error);
+	  res.status(500).send('Internal Server Error');
+	}
+  });
+
 router.get('/gets/:id',auth, async (req, res) => {
-	const todos = await User.findById(req.params.id);
+	const todos = await User.find( {name : req.params.id});
 	res.json(todos);
 });
 
