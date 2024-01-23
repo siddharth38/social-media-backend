@@ -24,4 +24,27 @@ router.put("/edit/:id", async (req, res) => {
   }
 });
 
+//get all user post details
+router.get("/userPostDetails/:name", async (req, res) => {
+  try {
+    const UserName = req.params.name;
+    const checkUser = await User.findOne({ name: UserName });
+    if (checkUser) {
+      const Posts = checkUser.posts;
+      res.send({
+        success: true,
+        message: " ALL post generated ",
+        Posts,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: `error in Post of ${req.params.name}`,
+    });
+  }
+});
+
 module.exports = router;

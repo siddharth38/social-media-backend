@@ -14,6 +14,9 @@ const UserSchema = new Schema(
     follows: {
       type: [],
     },
+    posts: {
+      type: [],
+    },
   },
   { timestamps: true }
 );
