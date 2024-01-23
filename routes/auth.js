@@ -24,6 +24,19 @@ router.get(
   })
 );
 
+// router.get(
+//   "/logIn",
+//   passport.authenticate("google", {
+//     session: false,
+//   }),
+//   (req, res) => {
+//     const userData = req.user;
+//     console.log(userData);
+//     const redirectUrl = `http://localhost:3001/?id=${userData.id}`;
+//     res.redirect(redirectUrl);
+//   }
+// );
+
 router.get("/me", isAuthenticated, myProfile);
 
 router.get("/logout", logout);

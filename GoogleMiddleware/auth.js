@@ -1,5 +1,5 @@
 const isAuthenticated = (req, res, next) => {
-  console.log("res from auth : ", res);
+  console.log("res from auth : ", re);
   // const token = req.cookies["connect.sid"];
   const token = req.cookies["https://besthealing.baavlibuch.com"];
 
