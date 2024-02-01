@@ -28,12 +28,14 @@ router.get(
 //   "/logIn",
 //   passport.authenticate("google", {
 //     session: false,
-//   }),
+//   }),;
 //   (req, res) => {
 //     const userData = req.user;
 //     console.log(userData);
-//     const redirectUrl = `http://localhost:3001/?id=${userData.id}`;
-//     res.redirect(redirectUrl);
+//     res.status(200).send({
+//       message: "Login sucessfully",
+//       userData,
+//     });
 //   }
 // );
 
@@ -44,6 +46,7 @@ router.get("/logout", logout);
 //end google authentication
 
 router.post("/login", async (req, res) => {
+  console.log("this req is from google ", req);
   const { name, password } = req.body;
   console.log("called");
   User.findOne({ name: name }, async (err, user) => {

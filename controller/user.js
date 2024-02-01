@@ -1,4 +1,7 @@
+const jwt = require("jsonwebtoken");
+
 const myProfile = (req, res, next) => {
+  console.log(req.user);
   const token = jwt.sign(
     { name: req.user.name, userId: req.user._id },
     "ajw065123",

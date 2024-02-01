@@ -7,7 +7,6 @@ const follow = require("./routes/follow");
 const profile = require("./routes/profile");
 const chat = require("./routes/chat");
 const { connectToDatabase, connection } = require("./config/db");
-const mongoose = require("mongoose");
 const PORT = process.env.PORT || 3000;
 const socket = require("socket.io");
 const doctorRanks = require("./utils/pagerank");
@@ -17,7 +16,9 @@ const connectPassport = require("./utils/Provider");
 const session = require("express-session");
 const passport = require("passport");
 const cookieparser = require("cookie-parser");
+const logout = require("./routes/auth");
 const app = express();
+
 connectToDatabase().then(() => {
   app.use(bodyParser.json({ limit: "50mb" }));
   app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
@@ -36,6 +37,14 @@ connectToDatabase().then(() => {
   });
 
   //creating a middleware for session for googel auth
+
+  const corsOptions = {
+    origin: "*", // Replace with your front-end origin
+    credentials: true,
+  };
+
+  app.use(cors(corsOptions));
+
   app.use(
     session({
       secret: "ajw065123",
@@ -43,14 +52,14 @@ connectToDatabase().then(() => {
       saveUninitialized: false,
     })
   );
-
+  app.use(cookieparser());
   app.use(passport.authenticate("session"));
   app.use(passport.initialize());
   app.use(passport.session());
-  app.use(cookieparser());
 
   connectPassport();
   app.use("/auth", Login);
+  // app.use("/auth", logout);
   app.use("/feed", upload);
   app.use("/follow", follow);
   app.use("/chat", chat);
