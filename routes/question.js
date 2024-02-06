@@ -2,6 +2,9 @@ const Question = require("../database/Question");
 const router = require("express").Router();
 const mongoose = require("mongoose");
 const auth = require("../middleware/auth");
+const axios = require("axios");
+const WebSocket = require("ws");
+const MEDISEARCH_KEY = "df28d43f-70bd-449a-a2d6-15396eb5d25a";
 
 // question routes
 router.post("/question/ask", auth, async (req, res) => {
@@ -139,5 +142,66 @@ router.patch("/answer/delete/:id", auth, async (req, res) => {
     res.status(405).json(error);
   }
 });
+
+router.post("/MediSearch", async (req, res) => {
+  try {
+    const { question } = req.body;
+
+    const ws = new WebSocket(
+      "wss://public.backend.medisearch.io:443/ws/medichat/api"
+    );
+
+    ws.on("open", function open() {
+      const settings = { language: "English" };
+      const chatContent = {
+        event: "user_message",
+        conversation: [question],
+        settings: settings,
+        key: MEDISEARCH_KEY,
+        id: generateID(),
+      };
+
+      ws.send(JSON.stringify(chatContent));
+    });
+    let message = "";
+
+    ws.on("message", function incoming(data) {
+      const strData = data.toString("utf8");
+      const jsonData = JSON.parse(strData);
+
+      if (jsonData.event === "articles") {
+        res.send(message);
+      } else if (jsonData.event === "llm_response") {
+        message = jsonData.text;
+      } else if (jsonData.event === "error") {
+        console.log("Got error:", jsonData.error);
+
+        // Send a single response to the client after processing WebSocket messages
+        res.status(500).json({ error: "Internal Server Error" });
+      }
+    });
+
+    ws.on("error", function error(err) {
+      console.log("WebSocket Error:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    });
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// Generate a random ID function
+function generateID() {
+  let id = "";
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (let i = 0; i < 32; i++) {
+    id += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+
+  return id;
+}
 
 module.exports = router;

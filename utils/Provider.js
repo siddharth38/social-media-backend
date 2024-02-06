@@ -3,8 +3,8 @@ const passport = require("passport");
 const User = require("../database/User");
 
 const GOOGLE_CLIENT_ID =
-  "1028441264640-pp9irv1kqt3o3smlp4p26l8d619vok8k.apps.googleusercontent.com";
-const GOOGLE_CLIENT_SECRET = "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";
+  "315394074642-hqtqagkhfe81mn4d98emjt43ve8im9mg.apps.googleusercontent.com";
+const GOOGLE_CLIENT_SECRET = "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";
 const GOOGLE_CALLBACK_URL = "https://besthealing.baavlibuch.com/auth/logIn";
 
 const connectPassport = () => {

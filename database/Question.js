@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const QuestionSchema = mongoose.Schema({
   questionTitle: { type: String, required: "Question must have a title" },
@@ -20,4 +20,4 @@ const QuestionSchema = mongoose.Schema({
   ],
 });
 
-module.exports= mongoose.model("Question", QuestionSchema);
+module.exports = mongoose.model("Question", QuestionSchema);
